@@ -7,6 +7,7 @@ from utils.model import *
 import random
 from datetime import datetime,timedelta
 import time
+import base64
 
 def createKeyPair(type,bits):
     '''
@@ -109,7 +110,7 @@ class CRLHandler():
         cert = self.kwargs["cert"]
         if cert.has_expired():
             raise certHasExpiredError()
-        elif crldb.checkInDatabase(cert.get_serial_number()):
+        elif crldb.checkInDatabase(str(cert.get_serial_number())):
             raise certAlreadyRevokedError()
         elif cert.get_subject().CN != self.ip:
             raise IPNotMatchError()
@@ -126,14 +127,15 @@ class CRLHandler():
         try:
             ctx.verify_certificate()
         except:
-            raise verifyError()
+            raise VerifyError()
         return True
 
     def checkOwn(self):
         """验证发起人对证书的所有权"""
         cert = self.kwargs["cert"]
         _verify = self.kwargs["verify"]
-        taskverify = self.verify
+        _verify = base64.b64decode(_verify.encode("UTF8"))
+        taskverify = self.verify.encode("UTF8")
         try:
             verify(cert, _verify, taskverify, "sha256")
             return True
