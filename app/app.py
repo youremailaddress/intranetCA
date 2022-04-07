@@ -141,5 +141,5 @@ def fetch():
 if __name__ == '__main__':
     p = Process(target=runCRL, args=(conf,))
     p.start()
-    app.run(conf.x509.bindIP, debug=True,port=8008,threaded=True,ssl_context=(conf.x509.server.certPath, conf.x509.server.privateKeyPath))
+    app.run(conf.x509.bindIP, debug=True,port=443,threaded=True,ssl_context=(conf.x509.server.certPath, conf.x509.server.privateKeyPath))
     p.join()
