@@ -95,7 +95,7 @@ class ServerConfig():
         self.ca = CAConfig()
         self.server = ServerSSLConfig()
         self.csr = CSRDefaultSubject()
-        self.bindIP = "172.23.64.1"
+        self.bindIP = "10.2.9.5"
         self.filetype = FILETYPE_PEM
 
 class CRLConfig():

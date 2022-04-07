@@ -66,7 +66,6 @@ def usage():
                 {
                 "data":
                     {
-                    "uuid":"str",
                     "cert":"str",
                     "verify":"base64 signed uuid",
                     "reason":"str optional in[unspecified/keyCompromise/CACompromise/affiliationChanged/superseded/cessationOfOperation/certificateHold]"
@@ -121,9 +120,12 @@ def remove():
             CRLHandler(conf, dic, ip, session['verify'])
         except Exception as e:
             return {
-            "status": "1",
+            "status": 1,
             "Msg": "{}".format(str(e))
             }
+        return {
+            "status":0
+        }
 
 @app.route("/"+conf.x509.ca.crl,methods=['GET'])
 def fetch():
@@ -141,5 +143,5 @@ def fetch():
 if __name__ == '__main__':
     p = Process(target=runCRL, args=(conf,))
     p.start()
-    app.run(conf.x509.bindIP, debug=True,port=8008,threaded=True,ssl_context=(conf.x509.server.certPath, conf.x509.server.privateKeyPath))
+    app.run(conf.x509.bindIP, debug=True,port=443,threaded=True,ssl_context=(conf.x509.server.certPath, conf.x509.server.privateKeyPath))
     p.join()

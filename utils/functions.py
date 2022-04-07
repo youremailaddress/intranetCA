@@ -94,7 +94,7 @@ class CRLHandler():
             raise CRAComponentsNotComplete()
         if kwargs.get("reason") == None:
             returndic['reason'] = ""
-        if kwargs.get("reason") not in ["unspecified","keyCompromise","CACompromise","affiliationChanged","superseded","cessationOfOperation","certificateHold"]:
+        elif kwargs.get("reason") not in ["unspecified","keyCompromise","CACompromise","affiliationChanged","superseded","cessationOfOperation","certificateHold"]:
             raise reasonNotAvailable()
         try:
             returndic["cert"] = load_certificate(FILETYPE_PEM, kwargs.get("cert").encode("UTF8"))
@@ -114,7 +114,7 @@ class CRLHandler():
         elif cert.get_subject().CN != self.ip:
             raise IPNotMatchError()
         crldb.closeConnect()
-        return cert.get_serial_number()
+        return str(cert.get_serial_number())
 
     def checkCA(self):
         """验证证书是否是自己签发"""
